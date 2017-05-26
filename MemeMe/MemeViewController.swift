@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MemeViewController: UIViewController {
     
     
     //Delegates
@@ -35,12 +35,8 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
-        topTextView.defaultTextAttributes = memeTextAttributes
-        topTextView.textAlignment = .center
-        topTextView.delegate = textFieldDelegate
-        bottomTextView.defaultTextAttributes = memeTextAttributes
-        bottomTextView.textAlignment = .center
-        bottomTextView.delegate = textFieldDelegate
+        setTextField(topTextView, withTextAttributes: memeTextAttributes)
+        setTextField(bottomTextView, withTextAttributes: memeTextAttributes)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,27 +49,28 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         unsubscribeFromKeyboardNotifications()
     }
     
-    //ImagePicker
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else { return }
-        imgMeme.image = pickedImage
-        dismiss(animated: true, completion: nil)
-        shareButton.isEnabled = true
+    //Set Functions
+
+    func setTextField(_ textField: UITextField, withTextAttributes: [String:Any]){
+        textField.defaultTextAttributes = withTextAttributes
+        textField.textAlignment = .center
+        textField.delegate = textFieldDelegate
     }
     
+    func setPickController(_ source: UIImagePickerControllerSourceType){
+        let pickController = UIImagePickerController()
+        pickController.delegate = self
+        pickController.sourceType =  source
+        self.present(pickController, animated: true, completion: nil)
+    }
     
     //IBActions
     @IBAction func PickImage(_ sender: UIBarButtonItem) {
-        let pickController = UIImagePickerController()
-        pickController.delegate = self
-        pickController.sourceType = .photoLibrary
-        self.present(pickController, animated: true, completion: nil)
+        setPickController(.camera)
+
     }
     @IBAction func TakePicture(_ sender: UIBarButtonItem) {
-        let pickController = UIImagePickerController()
-        pickController.delegate = self
-        pickController.sourceType = .camera
-        self.present(pickController, animated: true, completion: nil)
+        setPickController(.photoLibrary)
     }
     
     @IBAction func Cancel(_ sender: UIBarButtonItem) {

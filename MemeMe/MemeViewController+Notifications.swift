@@ -12,7 +12,9 @@ import UIKit
 extension MemeViewController {
     
     func keyboardWillShow(_ notification:Notification) {
-        view.frame.origin.y = -getKeyboardHeight(notification)
+        if bottomTextView.isFirstResponder {
+            view.frame.origin.y = -getKeyboardHeight(notification)
+        }
     }
     
     func keyboardWillHide (_ notification:Notification){

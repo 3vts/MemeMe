@@ -21,8 +21,7 @@ extension MemeViewController{
     func generateMemedImage() -> UIImage {
         
         // Hide toolbar and navbar
-        navigationBar.isHidden = true
-        toolBar.isHidden = true
+        setBarsVisibility(true)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -31,10 +30,14 @@ extension MemeViewController{
         UIGraphicsEndImageContext()
         
         // Show toolbar and navbar
-        navigationBar.isHidden = false
-        toolBar.isHidden = false
+        setBarsVisibility(false)
         
         return memedImage
+    }
+    
+    func setBarsVisibility(_ visible: Bool){
+        navigationBar.isHidden = visible
+        toolBar.isHidden = visible
     }
     
     func saveMeme() {
