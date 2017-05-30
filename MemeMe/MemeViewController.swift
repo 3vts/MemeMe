@@ -61,16 +61,17 @@ class MemeViewController: UIViewController {
         let pickController = UIImagePickerController()
         pickController.delegate = self
         pickController.sourceType =  source
+        pickController.allowsEditing = true
         self.present(pickController, animated: true, completion: nil)
     }
     
     //IBActions
     @IBAction func PickImage(_ sender: UIBarButtonItem) {
-        setPickController(.camera)
+        setPickController(.photoLibrary)
 
     }
     @IBAction func TakePicture(_ sender: UIBarButtonItem) {
-        setPickController(.photoLibrary)
+        setPickController(.camera)
     }
     
     @IBAction func Cancel(_ sender: UIBarButtonItem) {
@@ -78,7 +79,12 @@ class MemeViewController: UIViewController {
         topTextView.text = "TOP"
         bottomTextView.text = "BOTTOM"
         shareButton.isEnabled = false
-        view.resignFirstResponder()
+        let controller = UIAlertController(title: "Do you want to go back to the sent items?", message: nil, preferredStyle: .actionSheet)
+        let okAction = UIAlertAction(title: "Yes, go back", style: .destructive, handler: {action in self.dismiss(animated: true, completion: nil)})
+        let cancelAction = UIAlertAction(title: "No, stay here", style: .default, handler: nil)
+        controller.addAction(okAction)
+        controller.addAction(cancelAction)
+        self.present(controller, animated: true, completion: nil)
     }
     
     @IBAction func ShareMeme(_ sender: UIBarButtonItem) {

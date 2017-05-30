@@ -11,13 +11,6 @@ import UIKit
 
 extension MemeViewController{
     
-    struct Meme {
-        let topText: String
-        let bottomText: String
-        let originalImage: UIImage
-        let memedImage: UIImage
-    }
-    
     func generateMemedImage() -> UIImage {
         
         // Hide toolbar and navbar
@@ -44,7 +37,12 @@ extension MemeViewController{
         // Create the meme
         let memedImage = generateMemedImage()
         let meme = Meme(topText: topTextView.text!, bottomText: bottomTextView.text!, originalImage: imgMeme.image!, memedImage: memedImage)
-        UIImageWriteToSavedPhotosAlbum(meme.memedImage, nil, nil, nil)
+        // Add it to the memes array in the Application Delegate
+        let object = UIApplication.shared.delegate
+        let appDelegate = object as! AppDelegate
+        appDelegate.photoAlbum.append(memedImage)
+        appDelegate.memes.append(meme)
+        insertImage(meme.memedImage)
     }
     
 }
