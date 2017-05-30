@@ -79,22 +79,24 @@ extension MemeViewController {
     }
     
     func getImageArray() -> [UIImage] {
-        let assetCollection = fetchAssetCollectionWithAlbumName()
-        var collection = [UIImage]()
-        let imageCollection = PHAsset.fetchAssets(in: assetCollection!, options: nil)
-        for asset in  0...imageCollection.count - 1  {
-            var img: UIImage?
-            let manager = PHImageManager.default()
-            let options = PHImageRequestOptions()
-            options.version = .original
-            options.isSynchronous = true
-            manager.requestImageData(for: imageCollection.object(at: asset), options: options) { data, _, _, _ in
-                if let data = data {
-                    img = UIImage(data: data)
-                    collection.append(img!)
+        if let assetCollection = fetchAssetCollectionWithAlbumName() {
+            var collection = [UIImage]()
+            let imageCollection = PHAsset.fetchAssets(in: assetCollection, options: nil)
+            for asset in  0...imageCollection.count - 1  {
+                var img: UIImage?
+                let manager = PHImageManager.default()
+                let options = PHImageRequestOptions()
+                options.version = .original
+                options.isSynchronous = true
+                manager.requestImageData(for: imageCollection.object(at: asset), options: options) { data, _, _, _ in
+                    if let data = data {
+                        img = UIImage(data: data)
+                        collection.append(img!)
+                    }
                 }
             }
+            return collection
         }
-        return collection
+        return [UIImage]()
     }
 }
